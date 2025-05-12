@@ -1,5 +1,5 @@
-﻿using System.Runtime.Serialization;
-using System.ServiceModel;
+﻿using System.ServiceModel;
+using Transportadora.Models;
 
 namespace Transportadora.Interfaces;
 
@@ -14,30 +14,4 @@ public interface ITransportadorService
 
     [OperationContract]
     bool AtualizarStatus(string numeroPedido, string novoStatus);
-}
-
-[DataContract]
-public class Pedido
-{
-    [DataMember]
-    public string NumeroPedido { get; set; }
-
-    [DataMember]
-    public string Destinatario { get; set; }
-
-    [DataMember]
-    public string EnderecoEntrega { get; set; }
-
-    [DataMember]
-    public List<ItemPedido> Itens { get; set; }
-}
-
-[DataContract]
-public class ItemPedido
-{
-    [DataMember]
-    public string Nome { get; set; }
-
-    [DataMember]
-    public int Quantidade { get; set; }
 }

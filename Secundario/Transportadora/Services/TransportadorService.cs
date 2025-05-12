@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Transportadora.Interfaces;
+using Transportadora.Models;
 
 namespace Transportadora.Services;
 
