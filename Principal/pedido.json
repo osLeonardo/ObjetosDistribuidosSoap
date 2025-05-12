@@ -1,0 +1,9 @@
+{
+  "numeroPedido": "456",
+  "itens": [
+    { "nome": "Notebook", "quantidade": 1 },
+    { "nome": "Mouse", "quantidade": 2 }
+  ],
+  "enderecoEntrega": "Av. Brasil, 123",
+  "destinatario": "Maria Oliveira"
+}
