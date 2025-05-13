@@ -26,11 +26,11 @@ public class TransportadorService : ITransportadorService
         return $"Pedido {pedido.NumeroPedido} registrado com status '{status}'.";
     }
 
-    public Pedido ConsultarPedido(string numeroPedido)
+    public PedidoStatus ConsultarPedido(string numeroPedido)
     {
         if (_cache.TryGetValue(numeroPedido, out PedidoStatus pedidoStatus))
         {
-            return pedidoStatus.Pedido;
+            return pedidoStatus;
         }
         return null;
     }

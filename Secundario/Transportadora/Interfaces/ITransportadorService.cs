@@ -10,7 +10,7 @@ public interface ITransportadorService
     string RegistrarPedido(Pedido pedido);
 
     [OperationContract]
-    Pedido ConsultarPedido(string numeroPedido);
+    PedidoStatus ConsultarPedido(string numeroPedido);
 
     [OperationContract]
     string ConsultarStatus(string numeroPedido);
