@@ -18,7 +18,7 @@ var app = builder.Build();
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
-    endpoints.UseSoapEndpoint<ITransportadorService>("/TransportadorService.svc", new SoapEncoderOptions(), SoapSerializer.DataContractSerializer);
+    endpoints.UseSoapEndpoint<ITransportadorService>("/TransportadorService.svc", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
 });
 
 app.Run();
