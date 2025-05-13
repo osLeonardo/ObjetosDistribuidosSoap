@@ -13,8 +13,11 @@ public interface ITransportadorService
     PedidoStatus ConsultarPedido(string numeroPedido);
 
     [OperationContract]
-    string ConsultarStatus(string numeroPedido);
+    List<SituacaoPedido> ConsultarTodosPedidos();
 
     [OperationContract]
-    bool AtualizarStatus(string numeroPedido, string novoStatus);
+    SituacaoPedido ConsultarStatus(string numeroPedido);
+
+    [OperationContract]
+    string AtualizarStatus(string numeroPedido, int novoStatus);
 }

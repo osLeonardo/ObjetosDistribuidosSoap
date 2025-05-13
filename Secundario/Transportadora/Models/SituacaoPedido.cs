@@ -2,8 +2,8 @@
 
 namespace Transportadora.Models;
 
-public class PedidoStatus
+public class SituacaoPedido
 {
-    public Pedido Pedido { get; set; }
+    public string NumeroPedido { get; set; }
     public StatusEnum Status { get; set; }
 }
