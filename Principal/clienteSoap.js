@@ -10,6 +10,6 @@ soap.createClient(url, function (err, client) {
   client.RegistrarPedido({ pedido }, function (err, result) {
     if (err) return console.error("Erro ao enviar pedido:", err);
 
-    console.log("Resposta do transportador:", result);
+    console.log("Resposta do transportador:", result.RegistrarPedidoResult);
   });
 });

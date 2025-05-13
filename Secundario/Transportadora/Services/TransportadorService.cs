@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Transportadora.Interfaces;
 using Transportadora.Models;
+using Transportadora.Utils;
 
 namespace Transportadora.Services;
 
@@ -15,9 +16,23 @@ public class TransportadorService : ITransportadorService
 
     public string RegistrarPedido(Pedido pedido)
     {
+        var erro = PedidoUtils.ValidarPedido(pedido);
+        if (!string.IsNullOrEmpty(erro))
+            return erro;
+
         var status = "Aguardando coleta";
-        _cache.Set(pedido.NumeroPedido, status);
+        var pedidoStatus = new PedidoStatus { Pedido = pedido, Status = status };
+        _cache.Set(pedido.NumeroPedido, pedidoStatus);
         return $"Pedido {pedido.NumeroPedido} registrado com status '{status}'.";
+    }
+
+    public Pedido ConsultarPedido(string numeroPedido)
+    {
+        if (_cache.TryGetValue(numeroPedido, out PedidoStatus pedidoStatus))
+        {
+            return pedidoStatus.Pedido;
+        }
+        return null;
     }
 
     public string ConsultarStatus(string numeroPedido)
