@@ -1,6 +1,11 @@
 const soap = require("soap");
 
-const url = "http://localhost:5000/TransportadorService.svc?wsdl";
+const url = process.argv[2];
+if (!url) {
+  console.error('Uso: node consultarStatus.js <servicoSoapUrl>');
+  process.exit(1);
+}
+
 const numeroPedido = "456";
 
 soap.createClient(url, function (err, client) {

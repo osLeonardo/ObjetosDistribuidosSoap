@@ -1,7 +1,12 @@
 const soap = require("soap");
 const fs = require("fs");
 
-const url = "http://localhost:5000/TransportadorService.svc?wsdl";
+const url = process.argv[2];
+if (!url) {
+  console.error('Uso: node clienteSoap.js <servicoSoapUrl>');
+  process.exit(1);
+}
+
 const pedido = JSON.parse(fs.readFileSync("pedido.json", "utf8"));
 
 soap.createClient(url, function (err, client) {
