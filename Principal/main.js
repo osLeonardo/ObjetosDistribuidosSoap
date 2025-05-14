@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const readline = require('readline');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 
 const url = "http://localhost:5000/TransportadorService.svc?wsdl";
 const scripts = {
@@ -36,16 +36,11 @@ rl.question('Opção: ', (answer) => {
   }
 
   console.log(`Executando: ${script}\n`);
-  const cmd = `node ${script} ${url}`;
-  const child = exec(cmd, { cwd: __dirname }, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Erro ao executar script: ${stderr}`);
-    } else {
-      console.log(stdout);
+  const child = spawn('node', [script, url], { cwd: __dirname, stdio: 'inherit' });
+  child.on('exit', (code) => {
+    if (code !== 0) {
+      console.error(`Script saiu com código ${code}`);
     }
     rl.close();
   });
-
-  child.stdout.pipe(process.stdout);
-  child.stderr.pipe(process.stderr);
 });

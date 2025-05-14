@@ -1,4 +1,5 @@
 const soap = require("soap");
+const readline = require('readline');
 
 const url = process.argv[2];
 if (!url) {
@@ -6,14 +7,14 @@ if (!url) {
   process.exit(1);
 }
 
-const numeroPedido = "456";
-
-soap.createClient(url, function (err, client) {
-  if (err) return console.error("Erro ao criar cliente SOAP:", err);
-
-  client.ConsultarStatus({ numeroPedido }, function (err, result) {
-    if (err) return console.error("Erro ao consultar status:", err);
-
-    console.log("Status atual do pedido:", result.ConsultarStatusResult);
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+rl.question('Número do pedido: ', (numeroPedido) => {
+  soap.createClient(url, function (err, client) {
+    if (err) return console.error("Erro ao criar cliente SOAP:", err);
+    client.ConsultarStatus({ numeroPedido }, function (err, result) {
+      if (err) return console.error("Erro ao consultar status:", err);
+      console.log("Status atual do pedido:", result.ConsultarStatusResult);
+      rl.close();
+    });
   });
 });
