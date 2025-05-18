@@ -32,7 +32,12 @@ rl.question('Número do pedido: ', (numeroPedido) => {
           rl.close();
           process.exit(1);
         }
-        console.log("Resposta da atualização de status:", result.AtualizarStatusResult);
+        const res = result.AtualizarStatusResult;
+        if (!res.Success) {
+          console.error(res.Message);
+        } else {
+          console.log(res.Data);
+        }
         rl.close();
       });
     });

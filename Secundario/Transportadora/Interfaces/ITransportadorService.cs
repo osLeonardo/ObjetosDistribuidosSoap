@@ -7,17 +7,17 @@ namespace Transportadora.Interfaces;
 public interface ITransportadorService
 {
     [OperationContract]
-    string RegistrarPedido(Pedido pedido);
+    Response<string> RegistrarPedido(Pedido pedido);
 
     [OperationContract]
-    PedidoStatus ConsultarPedido(string numeroPedido);
+    Response<PedidoStatus> ConsultarPedido(string numeroPedido);
 
     [OperationContract]
-    List<SituacaoPedido> ConsultarTodosPedidos();
+    Response<List<SituacaoPedido>> ConsultarTodosPedidos();
 
     [OperationContract]
-    SituacaoPedido ConsultarStatus(string numeroPedido);
+    Response<SituacaoPedido> ConsultarStatus(string numeroPedido);
 
     [OperationContract]
-    string AtualizarStatus(string numeroPedido, int novoStatus);
+    Response<string> AtualizarStatus(string numeroPedido, int novoStatus);
 }

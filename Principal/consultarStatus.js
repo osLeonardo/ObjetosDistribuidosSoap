@@ -13,7 +13,12 @@ rl.question('Número do pedido: ', (numeroPedido) => {
     if (err) return console.error("Erro ao criar cliente SOAP:", err);
     client.ConsultarStatus({ numeroPedido }, function (err, result) {
       if (err) return console.error("Erro ao consultar status:", err);
-      console.log("Status atual do pedido:", result.ConsultarStatusResult);
+      const res = result.ConsultarStatusResult;
+      if (!res.Success) {
+        console.error(res.Message);
+      } else {
+        console.log(res.Data);
+      }
       rl.close();
     });
   });

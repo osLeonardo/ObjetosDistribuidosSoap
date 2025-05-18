@@ -17,6 +17,19 @@ soap.createClient(url, function (err, client) {
       console.error("Erro ao listar pedidos:", err);
       process.exit(1);
     }
-    console.log("Todos os pedidos:", JSON.stringify(result.ConsultarTodosPedidosResult, null, 2));
+    const res = result.ConsultarTodosPedidosResult;
+    if (!res.Success) {
+      console.error(res.Message);
+      process.exit(1);
+    }
+
+    const raw = res.Data.SituacaoPedido;
+    let lista = [];
+    if (Array.isArray(raw)) {
+      lista = raw;
+    } else if (raw) {
+      lista = [raw];
+    }
+    console.log(JSON.stringify(lista, null, 2));
   });
 });

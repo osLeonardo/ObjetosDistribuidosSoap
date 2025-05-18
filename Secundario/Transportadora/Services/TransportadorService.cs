@@ -17,13 +17,19 @@ public class TransportadorService : ITransportadorService
         _cache = cache;
     }
 
-    public string RegistrarPedido(Pedido pedido)
+    public Response<string> RegistrarPedido(Pedido pedido)
     {
         try
         {
             var erro = PedidoUtils.ValidarPedido(pedido);
             if (!string.IsNullOrEmpty(erro))
-                return erro;
+            {
+                return new Response<string>
+                {
+                    Success = false,
+                    Message = erro
+                };
+            }
 
             var pedidoStatus = new PedidoStatus
             {
@@ -33,7 +39,12 @@ public class TransportadorService : ITransportadorService
             _cache.Set(pedido.NumeroPedido, pedidoStatus);
             _pedidosKeys.Add(pedido.NumeroPedido);
 
-            return $"Pedido { pedido.NumeroPedido } registrado com status '{ _defaultStatus }'.";
+            var response = $"Pedido { pedido.NumeroPedido } registrado com status '{ _defaultStatus }'.";
+            return new Response<string>
+            {
+                Success = true,
+                Data = response
+            };
         }
         catch (Exception ex)
         {
@@ -41,16 +52,25 @@ public class TransportadorService : ITransportadorService
         }
     }
 
-    public PedidoStatus ConsultarPedido(string numeroPedido)
+    public Response<PedidoStatus> ConsultarPedido(string numeroPedido)
     {
         try
         {
             if (_cache.TryGetValue(numeroPedido, out PedidoStatus pedidoStatus))
             {
-                return pedidoStatus;
+                return new Response<PedidoStatus>
+                {
+                    Success = true,
+                    Data = pedidoStatus
+                };
             }
 
-            throw new InvalidOperationException($"Pedido { numeroPedido } não encontrado.");
+            var erro = $"Pedido { numeroPedido } não encontrado.";
+            return new Response<PedidoStatus>
+            {
+                Success = false,
+                Message = erro
+            };
         }
         catch (Exception ex)
         {
@@ -58,7 +78,7 @@ public class TransportadorService : ITransportadorService
         }
     }
 
-    public List<SituacaoPedido> ConsultarTodosPedidos()
+    public Response<List<SituacaoPedido>> ConsultarTodosPedidos()
     {
         try
         {
@@ -75,7 +95,11 @@ public class TransportadorService : ITransportadorService
                 }
             }
 
-            return todosPedidos;
+            return new Response<List<SituacaoPedido>>
+            {
+                Success = true,
+                Data = todosPedidos
+            };
         }
         catch (Exception ex)
         {
@@ -83,19 +107,31 @@ public class TransportadorService : ITransportadorService
         }
     }
 
-    public SituacaoPedido ConsultarStatus(string numeroPedido)
+    public Response<SituacaoPedido> ConsultarStatus(string numeroPedido)
     {
         try
         {
             if (_cache.TryGetValue(numeroPedido, out StatusEnum status))
             {
-                return new SituacaoPedido
+                var situacao = new SituacaoPedido
                 {
                     NumeroPedido = numeroPedido,
                     Status = status
                 };
+
+                return new Response<SituacaoPedido>
+                {
+                    Success = true,
+                    Data = situacao
+                };
             }
-            throw new InvalidOperationException($"Pedido { numeroPedido } não encontrado.");
+
+            var erro = $"Pedido { numeroPedido } não encontrado.";
+            return new Response<SituacaoPedido>
+            {
+                Success = false,
+                Message = erro
+            };
         }
         catch (Exception ex)
         {
@@ -103,7 +139,7 @@ public class TransportadorService : ITransportadorService
         }
     }
 
-    public string AtualizarStatus(string numeroPedido, int novoStatus)
+    public Response<string> AtualizarStatus(string numeroPedido, int novoStatus)
     {
         try
         {
@@ -117,13 +153,24 @@ public class TransportadorService : ITransportadorService
                 };
 
                 _cache.Set(numeroPedido, situacao);
-                return $"Status do pedido { numeroPedido } atualizado para '{ status }'.";
+                var response = $"Status do pedido { numeroPedido } atualizado para '{ status }'.";
+                return new Response<string>
+                {
+                    Success = true,
+                    Data = response
+                };
             }
-            return $"Pedido { numeroPedido } não encontrado.";
+
+            var erro = $"Pedido { numeroPedido } não encontrado.";
+            return new Response<string>
+            {
+                Success = false,
+                Message = erro
+            };
         }
         catch (Exception ex)
         {
-            return $"Erro ao atualizar status do pedido: { ex.Message }";
+            throw new InvalidOperationException($"Erro ao atualizar status do pedido: { ex.Message }");
         }
     }
 }
