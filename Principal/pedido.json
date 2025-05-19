@@ -1,9 +1,0 @@
-{
-  "NumeroPedido": "456",
-  "EnderecoEntrega": "Av. Brasil, 123",
-  "Destinatario": "Maria Oliveira",
-  "Itens": [
-    { "Nome": "Notebook", "Quantidade": 1 },
-    { "Nome": "Mouse", "Quantidade": 2 }
-  ]
-}

@@ -1,14 +1,17 @@
 const soap = require("soap");
-const readline = require('readline');
+const readline = require("readline");
 
 const url = process.argv[2];
 if (!url) {
-  console.error('Uso: node consultarPedido.js <servicoSoapUrl>');
+  console.error("Uso: node consultarPedido.js <servicoSoapUrl>");
   process.exit(1);
 }
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-rl.question('Número do pedido: ', (numeroPedido) => {
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+rl.question("Número do pedido: ", (numeroPedido) => {
   rl.close();
   enviarConsulta(numeroPedido.trim());
 });

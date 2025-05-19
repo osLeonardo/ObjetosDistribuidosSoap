@@ -2,23 +2,26 @@ const soap = require("soap");
 
 const url = process.argv[2];
 if (!url) {
-  console.error('Uso: node atualizarStatus.js <servicoSoapUrl>');
+  console.error("Uso: node atualizarStatus.js <servicoSoapUrl>");
   process.exit(1);
 }
 
-const readline = require('readline');
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const readline = require("readline");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
-rl.question('Número do pedido: ', (numeroPedido) => {
-  console.log('Status disponíveis:');
+rl.question("Número do pedido: ", (numeroPedido) => {
+  console.log("Status disponíveis:");
   console.table([
-    { description: 'Pedido não encontrado' },
-    { description: 'Aguardando coleta' },
-    { description: 'Em transporte' },
-    { description: 'Entregue' },
-    { description: 'Falha na entrega' }
+    { description: "Pedido não encontrado" },
+    { description: "Aguardando coleta" },
+    { description: "Em transporte" },
+    { description: "Entregue" },
+    { description: "Falha na entrega" },
   ]);
-  rl.question('Novo status (número): ', (novoStatusInput) => {
+  rl.question("Novo status (número): ", (novoStatusInput) => {
     const novoStatus = parseInt(novoStatusInput, 10);
     soap.createClient(url, function (err, client) {
       if (err) {
@@ -26,20 +29,23 @@ rl.question('Número do pedido: ', (numeroPedido) => {
         rl.close();
         process.exit(1);
       }
-      client.AtualizarStatus({ numeroPedido, novoStatus }, function (err, result) {
-        if (err) {
-          console.error("Erro ao atualizar status:", err);
+      client.AtualizarStatus(
+        { numeroPedido, novoStatus },
+        function (err, result) {
+          if (err) {
+            console.error("Erro ao atualizar status:", err);
+            rl.close();
+            process.exit(1);
+          }
+          const res = result.AtualizarStatusResult;
+          if (!res.Success) {
+            console.error(res.Message);
+          } else {
+            console.log(res.Data);
+          }
           rl.close();
-          process.exit(1);
         }
-        const res = result.AtualizarStatusResult;
-        if (!res.Success) {
-          console.error(res.Message);
-        } else {
-          console.log(res.Data);
-        }
-        rl.close();
-      });
+      );
     });
   });
 });
