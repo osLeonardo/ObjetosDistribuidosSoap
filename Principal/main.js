@@ -13,6 +13,8 @@ const scripts = {
 };
 
 function mostrarMenu() {
+  console.log("");
+  console.log("========================================");
   console.log("Selecione o script para executar:");
   console.table([
     { description: "Sair" },
