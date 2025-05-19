@@ -1,44 +1,55 @@
 #!/usr/bin/env node
-const readline = require('readline');
-const { spawn } = require('child_process');
+const readline = require("readline");
+const { spawn } = require("child_process");
 
 const url = "http://localhost:5000/TransportadorService.svc?wsdl";
 const scripts = {
-  '1': 'clienteSoap.js',
-  '2': 'consultarStatus.js',
-  '3': 'consultarPedido.js',
-  '4': 'consultarTodosPedidos.js',
-  '5': 'atualizarStatus.js'
+  1: "clienteSoap.js",
+  2: "consultarStatus.js",
+  3: "consultarPedido.js",
+  4: "consultarTodosPedidos.js",
+  5: "atualizarStatus.js",
 };
 
-console.log('Selecione o script para executar:');
+console.log("Selecione o script para executar:");
 console.table([
-  { description: 'Sair' },
-  { description: 'Registrar Pedido' },
-  { description: 'Consultar Status' },
-  { description: 'Consultar Pedido' },
-  { description: 'Listar Todos os Pedidos' },
-  { description: 'Atualizar Status' }
+  { description: "Sair" },
+  { description: "Registrar Pedido" },
+  { description: "Consultar Status" },
+  { description: "Consultar Pedido" },
+  { description: "Listar Todos os Pedidos" },
+  { description: "Atualizar Status" },
 ]);
-console.log('');
+console.log("");
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-rl.question('Opção: ', (answer) => {
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+rl.question("Opção: ", (answer) => {
   const choice = answer.trim();
-  if (choice === '0') {
-    console.log('Encerrando.');
-    return;
+  if (choice === "0") {
+    console.log("Encerrando.");
+    rl.close();
+    process.exit(0);
   }
+
   const script = scripts[choice];
   if (!script) {
-    console.log('Opção inválida.');
-    return;
+    console.log("Opção inválida.");
+    rl.close();
+    process.exit(1);
   }
 
+  rl.close();
+
   console.log(`Executando: ${script}\n`);
-  const child = spawn('node', [script, url], { cwd: __dirname, stdio: 'inherit' });
-  child.on('exit', code => {
+  const child = spawn("node", [script, url], {
+    cwd: __dirname,
+    stdio: "inherit",
+  });
+  child.on("exit", (code) => {
     if (code !== 0) console.error(`Script saiu com código ${code}`);
-    rl.close();
   });
 });
