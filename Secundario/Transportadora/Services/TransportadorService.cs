@@ -111,12 +111,12 @@ public class TransportadorService : ITransportadorService
     {
         try
         {
-            if (_cache.TryGetValue(numeroPedido, out StatusEnum status))
+            if (_cache.TryGetValue(numeroPedido, out PedidoStatus pedidoStatus))
             {
                 var situacao = new SituacaoPedido
                 {
-                    NumeroPedido = numeroPedido,
-                    Status = status
+                    NumeroPedido = pedidoStatus.Pedido.NumeroPedido,
+                    Status = pedidoStatus.Status
                 };
 
                 return new Response<SituacaoPedido>
@@ -143,17 +143,11 @@ public class TransportadorService : ITransportadorService
     {
         try
         {
-            if (_cache.TryGetValue(numeroPedido, out _))
+            if (_cache.TryGetValue(numeroPedido, out PedidoStatus pedidoStatus))
             {
-                var status = (StatusEnum)novoStatus;
-                var situacao = new SituacaoPedido
-                {
-                    NumeroPedido = numeroPedido,
-                    Status = status
-                };
-
-                _cache.Set(numeroPedido, situacao);
-                var response = $"Status do pedido { numeroPedido } atualizado para '{ status }'.";
+                pedidoStatus.Status = (StatusEnum)novoStatus;
+                _cache.Set(numeroPedido, pedidoStatus);
+                var response = $"Status do pedido { numeroPedido } atualizado para '{ pedidoStatus.Status }'.";
                 return new Response<string>
                 {
                     Success = true,
